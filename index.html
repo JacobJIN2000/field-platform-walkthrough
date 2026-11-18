@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Study walkthrough · AI / Control</title><link rel="stylesheet" href="demo.css"></head>
+<body>
+<header class="topbar">
+  <div class="brand"><span>LBS</span><div>Study walkthrough<small>Static study walkthrough</small></div></div>
+  <div class="group-switch" aria-label="Study group"><button data-group="ai" class="selected" aria-pressed="true">AI group</button><button data-group="control" aria-pressed="false">Control group</button></div>
+  <div class="tools"><span class="static-badge">Static demo · Example AI</span><label>Competition condition <select id="competition"><option value="0">0</option><option value="1">1</option></select></label><button id="restart">Start over</button><button id="toggle-notes">Hide presenter notes</button></div>
+</header>
+<div class="shell">
+<aside class="sidebar">
+ <div class="side-heading"><span id="group-label">AI group</span><small id="step-count">Ready to start</small></div>
+ <p class="side-caption">Follow the configured study order, or select any step.</p>
+ <nav id="steps" aria-label="Presentation steps"></nav>
+ <div class="side-footer">Static presentation · AI & Control<br>Jump between steps without completing every question or waiting for timers.</div>
+</aside>
+<main>
+ <section class="stepbar"><div><span class="eyebrow" id="position">PRESENTATION</span><h1 id="step-title">Walk through both study conditions</h1></div><div class="step-buttons"><button id="previous" disabled>← Previous</button><button id="next" disabled>Next →</button></div></section>
+ <section class="notes" id="notes"><div><h2>What participants do</h2><p id="task-note">Choose a group to view the actual participant pages.</p></div><div><h2>Purpose of this step</h2><p id="purpose-note">Explain the study procedure, learning tasks, AI assistance and final test.</p></div><div class="difference"><h2 id="difference-title">Group differences</h2><p id="difference-note">Each condition uses its own configured content and interface.</p><button id="compare" hidden>Compare this step in the other group ↔</button></div></section>
+ <div id="status" role="status" hidden></div>
+ <section class="preview" id="preview">
+  <div class="welcome" id="welcome"><span class="welcome-kicker">STEP BY STEP · AI & CONTROL</span><h2>Present each step.<br>Compare both groups.</h2><p>Explore the actual study pages, with presenter notes alongside. Switch groups at any step.</p><div class="start-buttons"><button id="start-ai" class="primary">Start AI group →</button><button id="start-control">Start control group →</button></div><small>No sign-in or server connection is required.<br>AI replies are labelled examples. Responses stay in this browser.</small></div>
+  <iframe id="participant" title="Participant view" allow="clipboard-write" hidden></iframe>
+ </section>
+</main>
+</div>
+<script src="demo.js"></script>
+</body></html>

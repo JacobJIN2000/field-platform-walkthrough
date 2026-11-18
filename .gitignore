@@ -1,0 +1,8 @@
+.DS_Store
+.env
+.env.*
+*.php
+*.sql
+*.log
+__pycache__/
+backups/
