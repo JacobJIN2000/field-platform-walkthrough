@@ -156,9 +156,21 @@
   function screens() { return runs[group]?.screens || []; }
   function different(screen) {
     const other = runs[group]?.otherScreens?.find(s => s.code === screen.code);
-    return !other || JSON.stringify(screen.blocks)!==JSON.stringify(other.blocks) || ['screen-session2-practice','screen-session3-review'].includes(screen.code);
+    if(!other || JSON.stringify(screen.blocks)!==JSON.stringify(other.blocks) || ['screen-session2-practice','screen-session3-review'].includes(screen.code))return true;
+    const pair=publicDataset?.groups[String($('competition').value)];
+    if(!pair)return false;
+    const contentFor=(data)=>{
+      if(screen.code==='screen-post-questionnaire')return data.post;
+      if(screen.code==='screen-baseline-questionnaire')return data.baseline;
+      if(screen.code==='screen-quiz')return data.comprehension;
+      if(screen.code==='screen-session2-belief-questionnaire')return data.belief['2'];
+      const stage=/^screen-session([1-4])-checkpoint$/.exec(screen.code)?.[1];
+      return stage?{questions:data.belief[stage],distributions:data.distributions[stage]}:null;
+    };
+    return JSON.stringify(contentFor(pair['1']))!==JSON.stringify(contentFor(pair['2']));
   }
-  const publicDataPromise=fetch('data.json').then(r=>{if(!r.ok)throw new Error('Could not load study content.');return r.json();});
+  let publicDataset;
+  const publicDataPromise=fetch('data.json').then(r=>{if(!r.ok)throw new Error('Could not load study content.');return r.json();}).then(data=>(publicDataset=data));
   async function api(body) {
     const dataset=await publicDataPromise;
     const condition=String($('competition').value);
