@@ -195,7 +195,7 @@
       const number=document.createElement('span');number.className='number';number.textContent=String(index+1).padStart(2,'0');
       const title=document.createElement('span');title.className='label';title.textContent=note(screen)[0];
       button.append(number,title);
-      if(different(screen)){const dot=document.createElement('span');dot.className='dot';dot.title='Content or interface differs between groups';button.append(dot);}
+      if(different(screen)){button.classList.add('group-difference');button.setAttribute('aria-label',note(screen)[0]+' — differs between groups');}
       button.addEventListener('click',()=>navigate(index));$('steps').append(button);
     });
   }
@@ -212,7 +212,10 @@
       diff=group==='ai'?'This group has a chat panel for each question, suggested prompts and chat history. The control group has no AI panel.':'This group has no AI panel. Switch to the AI group to compare the layout and available assistance.';
     }
     if(screen.code==='screen-session3-review') diff=group==='ai'?'In the current configuration, the AI group sees a transition message rather than the control group\'s question-by-question explanations.':'In the current configuration, the control group sees explanations for each question. The AI group sees its own transition message.';
-    $('difference-title').textContent=different(screen)?'Key group difference':'Group comparison';$('difference-note').textContent=diff;
+    const hasDifference=different(screen);
+    $('group-difference').hidden=!hasDifference;
+    $('notes').classList.toggle('shared-step',!hasDifference);
+    $('difference-title').textContent='AI vs Control';$('difference-note').textContent=hasDifference?diff:'';
     $('compare').hidden=!runs[group]?.otherScreens?.some(s=>s.code===screen.code);
     document.querySelectorAll('.step-link').forEach(b=>{b.classList.toggle('active',Number(b.dataset.index)===current);if(Number(b.dataset.index)===current)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');});
     controls();

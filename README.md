@@ -8,7 +8,8 @@ An English, browser-only presentation of the study's AI and control conditions.
 
 - Choose **AI group** or **Control group**.
 - Follow **Previous / Next**, or select any of the 28 configured steps.
-- Switch groups at the same step to compare the participant experience.
+- Highlighted directory entries identify steps that differ between groups.
+- Switch groups at the same step to compare the participant experience. Shared steps do not show a group-difference panel.
 - Hide presenter notes to enlarge the original participant interface.
 - Learning materials, forms and practice questions can be explored interactively.
 - AI replies are explicitly labelled illustrative examples; no model is called.
