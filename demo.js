@@ -188,7 +188,7 @@
   }
   function controls() {
     document.body.classList.toggle('busy',busy);
-    $('start-ai').disabled=busy;$('start-control').disabled=busy;$('restart').disabled=busy;
+    $('restart').disabled=busy;
     $('previous').disabled=busy || !screens().length || current===0;
     $('next').disabled=busy || !screens().length || current===screens().length-1;
     for(const b of document.querySelectorAll('[data-group]')){
@@ -213,6 +213,7 @@
   }
   function updateNotes() {
     const screen=screens()[current];if(!screen)return;
+    $('notes').hidden=false;
     const [title,task,purpose]=note(screen);
     $('position').textContent=`${group==='ai'?'AI GROUP':'CONTROL GROUP'} · ${current+1} / ${screens().length}`;
     $('step-title').textContent=title;
@@ -253,7 +254,7 @@
       sessionStorage.setItem(prefix+'app_token',runs[group].login.token);
       sessionStorage.setItem(prefix+'app_user_info',JSON.stringify({...prepared.user,loginTime:Date.now()}));
       sessionStorage.removeItem(prefix+'app_route_config');
-      $('welcome').hidden=true;frame.hidden=false;
+      frame.hidden=false;
       const frameGroup=screen.code==='screen-login'?'login':group;
       frame.src=`view.html?group=${frameGroup}&competition=${$('competition').value}&screen=${encodeURIComponent(screen.code)}#${screen.path}`;
       renderNavigation();updateNotes();
@@ -266,15 +267,12 @@
     if(busy||next===group)return;
     const code=screens()[current]?.code;
     group=next;controls();
-    if($('welcome').hidden){
-      // Both branches are loaded from their own targeting configuration.
-      busy=true;controls();try{await ensureRun();}catch(e){status(e.message,true);busy=false;controls();return;}busy=false;
-      const index=screens().findIndex(s=>s.code===code);
-      await navigate(index<0?0:index);
-    }
+    busy=true;controls();
+    try{await ensureRun();}catch(e){status(e.message,true);busy=false;controls();return;}
+    busy=false;
+    const index=screens().findIndex(s=>s.code===code);
+    await navigate(index<0?0:index);
   }
-  $('start-ai').onclick=()=>{group='ai';navigate(0);};
-  $('start-control').onclick=()=>{group='control';navigate(0);};
   document.querySelectorAll('[data-group]').forEach(b=>b.onclick=()=>changeGroup(b.dataset.group));
   $('restart').onclick=()=>{if(busy)return;delete runs.ai;delete runs.control;sessionStorage.removeItem('field_static_presenter');for(const key of Object.keys(sessionStorage))if(key.startsWith('field_static_answers_'))sessionStorage.removeItem(key);navigate(0);};
   $('previous').onclick=()=>navigate(current-1);$('next').onclick=()=>navigate(current+1);
@@ -294,12 +292,7 @@
     const path=event.data.hash.slice(1).split('?')[0];const index=screens().findIndex(s=>s.path===path);
     if(index>=0){current=index;updateNotes();}
   });
-  // Resume the same presentation without touching normal participant credentials.
-  try {
-    const saved=JSON.parse(sessionStorage.getItem('field_static_presenter'));
-    if(saved?.runs && ['ai','control'].includes(saved.group)){
-      Object.assign(runs,saved.runs);Object.values(runs).forEach(normalizePaths);group=saved.group;$('competition').value=String(saved.competition||0);navigate(Number(saved.current)||0);
-    }
-  }catch{/* A fresh demo is available if saved presentation data is unavailable. */}
+  // Always open the AI condition directly, without a separate welcome page.
   controls();
+  navigate(0);
 })();

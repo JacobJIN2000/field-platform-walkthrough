@@ -6,7 +6,7 @@ An English, browser-only presentation of the study's AI and control conditions.
 
 ## Presenting the study
 
-- Choose **AI group** or **Control group**.
+- The site opens directly at the first step of the **AI group**. Use the group switch to view **Control group**.
 - Follow **Previous / Next**, or select any of the 28 configured steps.
 - Highlighted directory entries identify steps that differ between groups.
 - Switch groups at the same step to compare the participant experience. Shared steps do not show a group-difference panel.
